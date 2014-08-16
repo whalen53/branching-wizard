@@ -1,0 +1,128 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/core-animated-pages/core-animated-pages.html" >
+
+<!--
+
+##### Example
+
+  <branching-wizard>
+    <wizard-step>
+      
+    </wizard-step>
+    <wizard-step>
+      
+    </wizard-step>
+  </wizard-wizard>
+
+@element branching-wizard
+-->
+<polymer-element name="branching-wizard" attributes="activeStepIndex, displayCancelButton, cancelText, previousText, nextText, finishText, branch, transitions">
+
+  <template>
+    <link href="branching-wizard.css" rel="stylesheet">
+
+        <core-animated-pages flex id="wizard" selected="{{activeStepIndex}}" transitions="{{transitions}}" on-core-select="{{updateButtons}}">
+          <content></content>
+        </core-animated-pages>
+    <div id="buttonPanel">
+        <button id="cancel" type="button" on-click={{cancel}}>{{cancelText}}</button>
+        <button id="previous" type="button" on-click={{previous}}>{{previousText}}</button>
+        <button id="next" type="button" on-click={{next}}>{{nextText}}</button>
+        <button id="finish" type="button" on-click={{finish}}>{{finishText}}</button>
+    </div>
+  </template>
+
+  <script>
+
+  Polymer('branching-wizard', {
+    publish: {
+      activeStepIndex: 0,
+      displayCancelButton: false,
+      cancelText: 'Cancel',
+      previousText: 'Previous',
+      nextText: 'Next',
+      finishText: 'Finish',
+      branch: '',
+      transitions: ''
+    },
+
+    previous: function(){
+      var selectedIndex = this.$.wizard.selected,
+          wizardSteps = this.$.wizard.items;
+
+      var e = this.fire("previous", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
+      if(e.returnValue){
+        do{
+          selectedIndex--;
+        }while(selectedIndex > -1 && wizardSteps[selectedIndex].branch && wizardSteps[selectedIndex].branch!=(this.branch));
+
+        if(selectedIndex > -1){
+          this.$.wizard.selected = selectedIndex;
+        }
+      }
+    },
+
+    next: function(){
+      var selectedIndex = this.$.wizard.selected,
+          wizardSteps = this.$.wizard.items;
+
+      var e = this.fire("next", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
+      if(e.returnValue){
+        do{
+          selectedIndex++;
+        }while(selectedIndex < wizardSteps.length && wizardSteps[selectedIndex].branch && wizardSteps[selectedIndex].branch!=(this.branch));
+
+        if(selectedIndex < wizardSteps.length){
+          this.$.wizard.selected = selectedIndex;
+        }
+      }
+    },
+
+    cancel: function(){
+      this.fire("cancel");
+    },
+
+    finish: function(){
+      this.fire("finish");
+    },
+
+    isLastStep: function(){
+      // Todo: check if last step in topological order
+
+      var selectedIndex = this.$.wizard.selected,
+          wizardSteps = this.$.wizard.items;
+
+      return selectedIndex == wizardSteps.length - 1;
+    },
+
+    updateButtons: function(){
+      this.$.cancel.style.display = this.displayCancelButton ? "inline-block" : "none";
+      this.$.previous.style.display = this.activeStepIndex > 0 ? "inline-block" : "none";
+      this.$.next.style.display = !this.isLastStep() ? "inline-block" : "none";
+      this.$.finish.style.display = this.isLastStep() ? "inline-block" : "none";
+    }
+
+  });
+
+  </script>
+
+</polymer-element>
+
+<polymer-element name="wizard-step" attributes="branch">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+
+  Polymer('wizard-step', {
+    publish:{
+      branch: ''
+    },
+
+  });
+
+  </script>
+
+</polymer-element>

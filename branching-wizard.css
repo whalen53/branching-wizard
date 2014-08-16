@@ -1,0 +1,18 @@
+:host {
+	/* Note: by default elements are always display:inline. */
+	display: block;
+	position: relative;
+}
+
+core-animated-pages {
+    height:300px;
+}
+
+#buttonPanel{
+	float:right;
+}
+
+polyfill-next-selector { content: '*'; }
+::content * {
+	
+}

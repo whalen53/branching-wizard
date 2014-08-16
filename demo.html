@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>branching-wizard demo</title>
+<script src="bower_components/platform/platform.js"></script>
+  <link rel="import" href="branching-wizard.html">
+
+  <style>
+    body{
+      font-family: sans-serif;
+    }
+
+    #wizard{
+      margin: 50px;
+    }
+  </style>
+
+</head>
+<body fullbleed vertical layout>
+
+  <branching-wizard id="wizard">
+    <wizard-step>
+      <h1>Hi, I'm a wizard!</h1>
+    </wizard-step>
+    <wizard-step>
+      <h1>Pick a color:</h1>
+      <input type="radio" name="two" value="P" onclick="handleClick(this);">Pink<br />
+      <input type="radio" name="two" value="B" onclick="handleClick(this);">Blue
+    </wizard-step>
+    <wizard-step branch="P" style="color: pink">
+      <h2>Her pink nose felt like velvet.</h2>
+    </wizard-step>
+    <wizard-step branch="B" style="color: skyblue">
+      <h2>I'm blue da ba dee da ba die.</h2>
+    </wizard-step>
+  </branching-wizard>
+
+<script>
+  var wizard = document.querySelector('branching-wizard');
+
+  wizard.addEventListener('next', function(e) {
+    if(wizard.activeStepIndex == 1){
+      if(!wizard.branch)
+        e.returnValue=false;
+    }
+  });
+
+  var handleClick = function(el){
+    wizard.branch = el.value;
+  };
+</script>
+
+</body>
+</html>
