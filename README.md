@@ -57,6 +57,10 @@ See the [component page](http://jns.me/branching-wizard/components/branching-wiz
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
+## Author
+
+[Jonas Anseeuw](http://jns.me)
+
 ## License
 
 Copyright © 2014 wixon
