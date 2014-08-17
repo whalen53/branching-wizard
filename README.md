@@ -31,7 +31,20 @@ $ bower install branching-wizard --save
 3. Start using it!
 
     ```html
-    <branching-wizard></branching-wizard>
+    <branching-wizard>
+        <wizard-step>
+          ...
+        </wizard-step>
+        <wizard-step branch="A">
+          ...
+        </wizard-step>
+        <wizard-step branch="B">
+          ...
+        </wizard-step>
+        <wizard-step>
+          ...
+        </wizard-step>
+    </wizard-wizard>
     ```
 
 See the [component page](http://jns.me/branching-wizard/components/branching-wizard/) for more information.
