@@ -1,4 +1,4 @@
-<branching-wizard>
+# &lt;branching-wizard&gt;
 ================
 
 > A flexible wizard polymer element with branches. Branches can be used to have optional wizard-steps or have different flows throught your wizard.
