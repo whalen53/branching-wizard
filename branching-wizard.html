@@ -1,34 +1,76 @@
-<link rel="import" href="bower_components/polymer/polymer.html">
-<link rel="import" href="bower_components/core-animated-pages/core-animated-pages.html" >
-
 <!--
+A `branching-wizard`is a wizard control with branching option.
 
-##### Example
+When you set the branch attribute for a wizard-step. The wizard-step will only be shown when the wizard is at the corresponding branch. If there is no branch attribute set for a wizard-step, the wizard-step will be shown.
+
+Example:
 
   <branching-wizard>
     <wizard-step>
-      
+      ...
+    </wizard-step>
+    <wizard-step branch="A">
+      ...
+    </wizard-step>
+    <wizard-step branch="B">
+      ...
     </wizard-step>
     <wizard-step>
-      
+      ...
     </wizard-step>
   </wizard-wizard>
 
 @element branching-wizard
 -->
-<polymer-element name="branching-wizard" attributes="activeStepIndex, displayCancelButton, cancelText, previousText, nextText, finishText, branch, transitions">
+
+<!--
+Fired when the current step that is displayed in the Wizard control is changed.
+
+@event activeStepChanged
+-->
+<!--
+Fired when the `cancel` button is clicked.
+
+@event cancelButtonClick
+-->
+<!--
+Fired when the `finish` button is clicked.
+
+@event finishButtonClick
+-->
+<!--
+Fired when the `next` button is clicked. You can prevent step changing by setting the returnValue of the event to false.
+
+@event nextButtonClick
+@param {Object} detail
+  @param {Object} detail.wizardStep the wizard-step element
+  @param {number} detail.wizardStepIndex the index of the wizard-step element.
+-->
+<!--
+Fired when the `previous` button is clicked. You can prevent step changing by setting the returnValue of the event to false.
+
+@event previousButtonClick
+@param {Object} detail
+  @param {Object} detail.wizardStep the wizard-step element
+  @param {number} detail.wizardStepIndex the index of the wizard-step element.
+-->
+
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/core-animated-pages/core-animated-pages.html" >
+
+<polymer-element name="branching-wizard" attributes="activeStepIndex, displayCancelButton, cancelButtonText, previousButtonText, nextButtonText, finishButtonText, branch, transitions">
 
   <template>
     <link href="branching-wizard.css" rel="stylesheet">
 
-        <core-animated-pages flex id="wizard" selected="{{activeStepIndex}}" transitions="{{transitions}}" on-core-select="{{updateButtons}}">
+        <core-animated-pages flex id="wizard" selected="{{activeStepIndex}}" transitions="{{transitions}}" >
           <content></content>
         </core-animated-pages>
     <div id="buttonPanel">
-        <button id="cancel" type="button" on-click={{cancel}}>{{cancelText}}</button>
-        <button id="previous" type="button" on-click={{previous}}>{{previousText}}</button>
-        <button id="next" type="button" on-click={{next}}>{{nextText}}</button>
-        <button id="finish" type="button" on-click={{finish}}>{{finishText}}</button>
+        <button id="cancel" type="button" on-click={{cancel}}>{{cancelButtonText}}</button>
+        <button id="previous" type="button" on-click={{previous}}>{{previousButtonText}}</button>
+        <button id="next" type="button" on-click={{next}}>{{nextButtonText}}</button>
+        <button id="finish" type="button" on-click={{finish}}>{{finishButtonText}}</button>
     </div>
   </template>
 
@@ -36,21 +78,89 @@
 
   Polymer('branching-wizard', {
     publish: {
+
+      /**
+       * Gets or sets the index of the current step in the wizard.
+       *
+       * @attribute activeStepIndex
+       * @type number
+       * @default 0
+       */
       activeStepIndex: 0,
+
+      /**
+       * Gets or sets a boolean indicating whether to display a Cancel button. 
+       *
+       * @attribute displayCancelButton
+       * @type boolean
+       * @default false
+       */
       displayCancelButton: false,
-      cancelText: 'Cancel',
-      previousText: 'Previous',
-      nextText: 'Next',
-      finishText: 'Finish',
+
+      /**
+       * Gets or sets the text caption that is displayed for the `cancel` button.
+       *
+       * @attribute cancelButtonText
+       * @type string
+       * @default 'Cancel'
+       */
+      cancelButtonText: 'Cancel',
+
+      /**
+       * Gets or sets the text caption that is displayed for the `previous` button.
+       *
+       * @attribute previousButtonText
+       * @type string
+       * @default 'Previous'
+       */
+      previousButtonText: 'Previous',
+
+      /**
+       * Gets or sets the text caption that is displayed for the `next` button.
+       *
+       * @attribute nextButtonText
+       * @type string
+       * @default 'Next'
+       */
+      nextButtonText: 'Next',
+
+      /**
+       * Gets or sets the text caption that is displayed for the `finish` button
+       *
+       * @attribute finishButtonText
+       * @type string
+       * @default 'Finish'
+       */
+      finishButtonText: 'Finish',
+
+      /**
+       * Gets or sets the branch the wizard is on.
+       *
+       * @attribute branch
+       * @type string
+       * @default ''
+       */
       branch: '',
+
+      /**
+       * A space-delimited string of transitions to use when switching between steps in the wizard. The strings are `id`s of `core-transition-pages` elements included elsewhere. See the individual transition's document for specific details.
+       *
+       * @attribute transitions
+       * @type string
+       * @default ''
+       */
       transitions: ''
+    },
+
+    ready: function(){
+      this.updateButtons();
     },
 
     previous: function(){
       var selectedIndex = this.$.wizard.selected,
           wizardSteps = this.$.wizard.items;
 
-      var e = this.fire("previous", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
+      var e = this.fire("previousButtonClick", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
       if(e.returnValue){
         do{
           selectedIndex--;
@@ -66,7 +176,7 @@
       var selectedIndex = this.$.wizard.selected,
           wizardSteps = this.$.wizard.items;
 
-      var e = this.fire("next", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
+      var e = this.fire("nextButtonClick", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
       if(e.returnValue){
         do{
           selectedIndex++;
@@ -79,11 +189,11 @@
     },
 
     cancel: function(){
-      this.fire("cancel");
+      this.fire("cancelButtonClick");
     },
 
     finish: function(){
-      this.fire("finish");
+      this.fire("finishButtonClick");
     },
 
     isLastStep: function(){
@@ -93,6 +203,11 @@
           wizardSteps = this.$.wizard.items;
 
       return selectedIndex == wizardSteps.length - 1;
+    },
+
+    activeStepIndexChanged: function(){
+      this.fire("activeStepChanged");
+      this.updateButtons();
     },
 
     updateButtons: function(){
@@ -118,6 +233,14 @@
 
   Polymer('wizard-step', {
     publish:{
+
+      /**
+       * Gets or sets the branch the step is on.
+       *
+       * @attribute branch
+       * @type string
+       * @default ''
+       */
       branch: ''
     },
 
