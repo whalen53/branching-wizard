@@ -13,7 +13,7 @@
     "**/.*"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.3.4",
+    "polymer": "Polymer/polymer#master",
     "core-animated-pages": "Polymer/core-animated-pages#master"
   },
   "resolutions": {
