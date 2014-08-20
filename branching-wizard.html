@@ -56,16 +56,16 @@ Fired when the `previous` button is clicked. You can prevent step changing by se
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../core-animated-pages/core-animated-pages.html" >
+<link rel="import" href="../core-pages/core-pages.html" >
 
-<polymer-element name="branching-wizard" attributes="activeStepIndex, displayCancelButton, cancelButtonText, previousButtonText, nextButtonText, finishButtonText, branch, transitions">
+<polymer-element name="branching-wizard" attributes="activeStepIndex, displayCancelButton, cancelButtonText, previousButtonText, nextButtonText, finishButtonText, branch">
 
   <template>
     <link href="branching-wizard.css" rel="stylesheet">
 
-        <core-animated-pages flex id="wizard" selected="{{activeStepIndex}}" transitions="{{transitions}}" >
-          <content></content>
-        </core-animated-pages>
+    <core-pages flex id="wizard" selected="{{activeStepIndex}}">
+      <content></content>
+    </core-pages>
     <div id="buttonPanel">
         <button id="cancel" type="button" on-click={{cancel}}>{{cancelButtonText}}</button>
         <button id="previous" type="button" on-click={{previous}}>{{previousButtonText}}</button>
@@ -89,7 +89,7 @@ Fired when the `previous` button is clicked. You can prevent step changing by se
       activeStepIndex: 0,
 
       /**
-       * Gets or sets a boolean indicating whether to display a `cancel` button. 
+       * Gets or sets a boolean indicating whether to display a `cancel` button.
        *
        * @attribute displayCancelButton
        * @type boolean
@@ -140,16 +140,7 @@ Fired when the `previous` button is clicked. You can prevent step changing by se
        * @type string
        * @default ''
        */
-      branch: '',
-
-      /**
-       * A space-delimited string of transitions to use when switching between steps in the wizard. The strings are `id`s of `core-transition-pages` elements included elsewhere. See the individual transition's document for specific details.
-       *
-       * @attribute transitions
-       * @type string
-       * @default ''
-       */
-      transitions: ''
+      branch: ''
     },
 
     ready: function(){

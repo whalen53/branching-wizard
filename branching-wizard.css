@@ -4,7 +4,7 @@
 	position: relative;
 }
 
-core-animated-pages {
+core-pages {
     height:300px;
 }
 
@@ -14,5 +14,5 @@ core-animated-pages {
 
 polyfill-next-selector { content: '*'; }
 ::content * {
-	
+
 }
