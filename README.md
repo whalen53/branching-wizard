@@ -37,13 +37,11 @@ If no branch is set, the step belongs to the *master* branch, which is an empty 
 ```
 
 ```JavaScript
-<script>
-  var wizard = document.querySelector('branching-wizard');
+var wizard = document.querySelector('branching-wizard');
 
-  var handleClick = function(el){
-    wizard.branch = el.value;
-  };
-</script>
+var handleClick = function(el){
+  wizard.branch = el.value;
+};
 ```
 
 ###Validation
