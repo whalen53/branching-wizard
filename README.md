@@ -2,9 +2,64 @@
 
 > A flexible wizard Polymer element with branches. Branches can be used to have optional wizard-steps or have different flows through your wizard.
 
-## Demo (Works best in Chrome)
+## Demo (works best in Chrome)
 
 [Check it live!](http://jns.me/branching-wizard/components/branching-wizard/demo.html)
+
+## How does it work?
+
+A wizard has a certain flow, containing different wizard-steps. In this case the flow is called a *branch*.
+
+The magical part of the branching-wizard element is that it can have multiple branches. This allows you to have optional steps. You can have a different next step depending on a certain choice.
+
+The example below demonstrates a branching-wizard that contains four steps and two branches. In step two, the user can pick a color. The third step will depend on what color the user picked.
+
+The `branch` attribute of the wizard-step determines to what branch the step belongs.
+If no branch is set, the step belongs to the *master* branch, which is an empty string.
+
+```HTML
+<branching-wizard>
+  <wizard-step>
+    <h1>Hi, I'm a wizard!</h1>
+  </wizard-step>
+  <wizard-step>
+    <h1>Pick a color:</h1>
+    <input type="radio" name="two" value="P" onclick="handleClick(this);">Pink<br />
+    <input type="radio" name="two" value="B" onclick="handleClick(this);">Blue
+  </wizard-step>
+  <wizard-step branch="P" style="color: pink">
+    <h2>Her pink nose felt like velvet.</h2>
+  </wizard-step>
+  <wizard-step branch="B" style="color: skyblue">
+    <h2>I'm blue da ba dee da ba die.</h2>
+  </wizard-step>
+</branching-wizard>
+```
+
+```JavaScript
+<script>
+  var wizard = document.querySelector('branching-wizard');
+
+  var handleClick = function(el){
+    wizard.branch = el.value;
+  };
+</script>
+```
+
+###Validation
+
+What if the user doesn't pick a color? How can you validate user input?
+You can listen for the `next` event. Setting the *returnValue* to false will cancel moving to the next step.
+
+```JavaScript
+wizard.addEventListener('next', function(e) {
+  if(wizard.activeStepIndex == 1){
+    if(!wizard.branch)
+      e.returnValue=false;
+  }
+});
+```
+
 
 ## Install
 
