@@ -1,8 +1,8 @@
 # &lt;branching-wizard&gt;
 
-> A flexible wizard polymer element with branches. Branches can be used to have optional wizard-steps or have different flows through your wizard.
+> A flexible wizard Polymer element with branches. Branches can be used to have optional wizard-steps or have different flows through your wizard.
 
-## Demo
+## Demo (Works best in Chrome)
 
 [Check it live!](http://jns.me/branching-wizard/components/branching-wizard/demo.html)
 
