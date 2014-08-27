@@ -14,9 +14,6 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#master",
-    "core-animated-pages": "Polymer/core-animated-pages#master"
-  },
-  "resolutions": {
-    "core-component-page": "master"
+    "core-pages": "Polymer/core-pages#master"
   }
 }

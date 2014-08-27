@@ -149,8 +149,8 @@ Fired when the `previous` button is clicked. You can prevent step changing by se
 
     previous: function(){
       var selectedIndex = this.$.wizard.selected,
-          wizardSteps = this.$.wizard.items;
-
+          wizardSteps = this.children;
+      console.log(wizardSteps);
       var e = this.fire("previousButtonClick", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
       if(e.returnValue){
         do{
@@ -165,8 +165,8 @@ Fired when the `previous` button is clicked. You can prevent step changing by se
 
     next: function(){
       var selectedIndex = this.$.wizard.selected,
-          wizardSteps = this.$.wizard.items;
-
+          wizardSteps = this.children;
+      console.log(wizardSteps);
       var e = this.fire("nextButtonClick", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
       if(e.returnValue){
         do{
