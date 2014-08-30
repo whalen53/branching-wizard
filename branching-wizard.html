@@ -26,22 +26,22 @@ Example:
 <!--
 Fired when the current step that is displayed in the Wizard control is changed.
 
-@event activeStepChanged
+@event branching-wizard-active-step-change
 -->
 <!--
 Fired when the `cancel` button is clicked.
 
-@event cancelButtonClick
+@event branching-wizard-cancel-button-click
 -->
 <!--
 Fired when the `finish` button is clicked.
 
-@event finishButtonClick
+@event branching-wizard-finish-button-click
 -->
 <!--
 Fired when the `next` button is clicked. You can prevent step changing by setting the returnValue of the event to false.
 
-@event nextButtonClick
+@event branching-wizard-next-button-click
 @param {Object} detail
   @param {Object} detail.wizardStep the wizard-step element
   @param {number} detail.wizardStepIndex the index of the wizard-step element.
@@ -49,7 +49,7 @@ Fired when the `next` button is clicked. You can prevent step changing by settin
 <!--
 Fired when the `previous` button is clicked. You can prevent step changing by setting the returnValue of the event to false.
 
-@event previousButtonClick
+@event branching-wizard-previous-button-click
 @param {Object} detail
   @param {Object} detail.wizardStep the wizard-step element
   @param {number} detail.wizardStepIndex the index of the wizard-step element.
@@ -151,7 +151,7 @@ Fired when the `previous` button is clicked. You can prevent step changing by se
       var selectedIndex = this.$.wizard.selected,
           wizardSteps = this.children;
 
-      var e = this.fire("previousButtonClick", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
+      var e = this.fire("branching-wizard-previous-button-click", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
       if(e.returnValue != false){
         do{
           selectedIndex--;
@@ -167,7 +167,7 @@ Fired when the `previous` button is clicked. You can prevent step changing by se
       var selectedIndex = this.$.wizard.selected,
           wizardSteps = this.$.wizard.items;
 
-      var e = this.fire("nextButtonClick", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
+      var e = this.fire("branching-wizard-next-buton-click", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
       if(e.returnValue != false){
         do{
           selectedIndex++;
@@ -180,11 +180,11 @@ Fired when the `previous` button is clicked. You can prevent step changing by se
     },
 
     cancel: function(){
-      this.fire("cancelButtonClick");
+      this.fire("branching-wizard-cancel-button-click");
     },
 
     finish: function(){
-      this.fire("finishButtonClick");
+      this.fire("branching-wizard-finish-button-click");
     },
 
     isLastStep: function(){
@@ -197,7 +197,7 @@ Fired when the `previous` button is clicked. You can prevent step changing by se
     },
 
     activeStepIndexChanged: function(){
-      this.fire("activeStepChanged");
+      this.fire("branching-wizard-active-step-change");
       this.updateButtons();
     },
 
