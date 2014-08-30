@@ -1,0 +1,19 @@
+{
+  "name": "branching-wizard",
+  "version": "0.3.0",
+  "authors": [
+    "Wixon <jns.me>"
+  ],
+  "description": "Element providing a wizard control with branching option",
+  "keywords": "wizard, polymer, web-components",
+  "main": "branching-wizard.html",
+  "license": "MIT",
+  "homepage": "https://github.com/wixon/branching-wizard/",
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#master",
+    "core-pages": "Polymer/core-pages#master"
+  }
+}

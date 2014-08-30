@@ -1,0 +1,7 @@
+{
+  "name": "branching-wizard#gh-pages",
+  "private": true,
+  "dependencies": {
+    "branching-wizard": "wixon/branching-wizard#master"
+  }
+}

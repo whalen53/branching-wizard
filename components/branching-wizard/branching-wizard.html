@@ -1,0 +1,242 @@
+<!--
+A `branching-wizard` is a wizard control with branching option.
+
+When you set the branch attribute for a wizard-step. The wizard-step will only be shown when the wizard is at the corresponding branch. If there is no branch attribute set for a wizard-step, the wizard-step will be shown.
+
+Example:
+
+  <branching-wizard>
+    <wizard-step>
+      ...
+    </wizard-step>
+    <wizard-step branch="A">
+      ...
+    </wizard-step>
+    <wizard-step branch="B">
+      ...
+    </wizard-step>
+    <wizard-step>
+      ...
+    </wizard-step>
+  </wizard-wizard>
+
+@element branching-wizard
+-->
+
+<!--
+Fired when the current step that is displayed in the Wizard control is changed.
+
+@event branching-wizard-active-step-change
+-->
+<!--
+Fired when the `cancel` button is clicked.
+
+@event branching-wizard-cancel-button-click
+-->
+<!--
+Fired when the `finish` button is clicked.
+
+@event branching-wizard-finish-button-click
+-->
+<!--
+Fired when the `next` button is clicked. You can prevent step changing by setting the returnValue of the event to false.
+
+@event branching-wizard-next-button-click
+@param {Object} detail
+  @param {Object} detail.wizardStep the wizard-step element
+  @param {number} detail.wizardStepIndex the index of the wizard-step element.
+-->
+<!--
+Fired when the `previous` button is clicked. You can prevent step changing by setting the returnValue of the event to false.
+
+@event branching-wizard-previous-button-click
+@param {Object} detail
+  @param {Object} detail.wizardStep the wizard-step element
+  @param {number} detail.wizardStepIndex the index of the wizard-step element.
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-pages/core-pages.html" >
+
+<polymer-element name="branching-wizard" attributes="activeStepIndex, displayCancelButton, cancelButtonText, previousButtonText, nextButtonText, finishButtonText, branch">
+
+  <template>
+    <link href="branching-wizard.css" rel="stylesheet">
+
+    <core-pages flex id="wizard" selected="{{activeStepIndex}}">
+      <content></content>
+    </core-pages>
+    <div id="buttonPanel">
+        <button id="cancel" type="button" on-click={{cancel}}>{{cancelButtonText}}</button>
+        <button id="previous" type="button" on-click={{previous}}>{{previousButtonText}}</button>
+        <button id="next" type="button" on-click={{next}}>{{nextButtonText}}</button>
+        <button id="finish" type="button" on-click={{finish}}>{{finishButtonText}}</button>
+    </div>
+  </template>
+
+  <script>
+
+  Polymer('branching-wizard', {
+    publish: {
+
+      /**
+       * Gets or sets the index of the current step in the wizard.
+       *
+       * @attribute activeStepIndex
+       * @type number
+       * @default 0
+       */
+      activeStepIndex: 0,
+
+      /**
+       * Gets or sets a boolean indicating whether to display a `cancel` button.
+       *
+       * @attribute displayCancelButton
+       * @type boolean
+       * @default false
+       */
+      displayCancelButton: false,
+
+      /**
+       * Gets or sets the text caption that is displayed for the `cancel` button.
+       *
+       * @attribute cancelButtonText
+       * @type string
+       * @default 'Cancel'
+       */
+      cancelButtonText: 'Cancel',
+
+      /**
+       * Gets or sets the text caption that is displayed for the `previous` button.
+       *
+       * @attribute previousButtonText
+       * @type string
+       * @default 'Previous'
+       */
+      previousButtonText: 'Previous',
+
+      /**
+       * Gets or sets the text caption that is displayed for the `next` button.
+       *
+       * @attribute nextButtonText
+       * @type string
+       * @default 'Next'
+       */
+      nextButtonText: 'Next',
+
+      /**
+       * Gets or sets the text caption that is displayed for the `finish` button
+       *
+       * @attribute finishButtonText
+       * @type string
+       * @default 'Finish'
+       */
+      finishButtonText: 'Finish',
+
+      /**
+       * Gets or sets the branch the wizard is on.
+       *
+       * @attribute branch
+       * @type string
+       * @default ''
+       */
+      branch: ''
+    },
+
+    ready: function(){
+      this.updateButtons();
+    },
+
+    previous: function(){
+      var selectedIndex = this.$.wizard.selected,
+          wizardSteps = this.children;
+
+      var e = this.fire("branching-wizard-previous-button-click", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
+      if(e.returnValue != false){
+        do{
+          selectedIndex--;
+        }while(selectedIndex > -1 && wizardSteps[selectedIndex].branch && wizardSteps[selectedIndex].branch!=(this.branch));
+
+        if(selectedIndex > -1){
+          this.$.wizard.selected = selectedIndex;
+        }
+      }
+    },
+
+    next: function(){
+      var selectedIndex = this.$.wizard.selected,
+          wizardSteps = this.$.wizard.items;
+
+      var e = this.fire("branching-wizard-next-buton-click", {wizardStep: wizardSteps[selectedIndex], wizardStepIndex: selectedIndex});
+      if(e.returnValue != false){
+        do{
+          selectedIndex++;
+        }while(selectedIndex < wizardSteps.length && wizardSteps[selectedIndex].branch && wizardSteps[selectedIndex].branch!=(this.branch));
+
+        if(selectedIndex < wizardSteps.length){
+          this.$.wizard.selected = selectedIndex;
+        }
+      }
+    },
+
+    cancel: function(){
+      this.fire("branching-wizard-cancel-button-click");
+    },
+
+    finish: function(){
+      this.fire("branching-wizard-finish-button-click");
+    },
+
+    isLastStep: function(){
+      // Todo: check if last step in topological order
+
+      var selectedIndex = this.$.wizard.selected,
+          wizardSteps = this.$.wizard.items;
+
+      return selectedIndex == wizardSteps.length - 1;
+    },
+
+    activeStepIndexChanged: function(){
+      this.fire("branching-wizard-active-step-change");
+      this.updateButtons();
+    },
+
+    updateButtons: function(){
+      this.$.cancel.style.display = this.displayCancelButton ? "inline-block" : "none";
+      this.$.previous.style.display = this.activeStepIndex > 0 ? "inline-block" : "none";
+      this.$.next.style.display = !this.isLastStep() ? "inline-block" : "none";
+      this.$.finish.style.display = this.isLastStep() ? "inline-block" : "none";
+    }
+
+  });
+
+  </script>
+
+</polymer-element>
+
+<polymer-element name="wizard-step" attributes="branch">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+
+  Polymer('wizard-step', {
+    publish:{
+
+      /**
+       * Gets or sets the branch the step is on.
+       *
+       * @attribute branch
+       * @type string
+       * @default ''
+       */
+      branch: ''
+    },
+
+  });
+
+  </script>
+
+</polymer-element>
